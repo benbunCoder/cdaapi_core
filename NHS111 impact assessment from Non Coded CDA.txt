@@ -1,0 +1,54 @@
+
+Entry Class
+ - default 'code' to SCT values
+ - default 'title' to DMS values
+ 
+Information Recipient
+ - 000080 same as NonCoded CDA :: no changes required.
+ 
+Data Enterer
+ - Not required for 111 therefore remove.
+ 
+Authenticator
+ - Not required for 111 therefore remove.
+ 
+Author
+ - 000081 same as NonCoded CDA :: no changes required.
+ 
+Patient
+ - 000083 same as NonCoded CDA :: no changes required.
+ 
+Custodian
+ - 000014 same as NonCoded CDA :: no changes required.
+ 
+Informant
+ - 000085 same as NonCoded CDA :: no changes required.
+ 
+Participant
+ - 000086 same as NonCoded CDA :: no changes required.
+ 
+Parent Document
+ - default 'code' to SCT values
+ - default 'title' to DMS values
+ 
+Service Event
+ - 000050 same as NonCoded CDA :: no changes required.
+ 
+Consent
+ - 000051 same as NonCoded CDA :: no changes required.
+ 
+Encompassing Encounter
+ - Constraint NPFIT-000052#Act needs to be added
+ - Template COCD_TP146232GB01 needs to be added, very similar to COCD_TP146228GB01
+ 
+Structured Body
+ - Remove the option for NonXML Body
+ - Different NPFIT-000040#Section than defined in NonCoded CDA (this is a defect!)
+ - Add NHS 111 Text Section template (COCD_TP146246GB01) very similar to COCD_TP146229GB01
+ - Add the NPFIT-000065#Section as a constraint
+ - Add template TriageAttachment (COCD_TP146002GB01), which also requires
+ - Add the NPFIT-000087#Role as a constraint
+ - Add template NHS111TriageDevice (COCD_TP145000GB01)
+ 
+ 
+ 
