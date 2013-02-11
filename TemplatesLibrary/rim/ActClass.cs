@@ -244,6 +244,16 @@ namespace nhs.itk.hl7v3.rim
                     writer.WriteString(valueED);
                     writer.WriteEndElement();
                 }
+
+                if (valueType == "ED.NHS.NHS111Attachment")
+                {
+                    writer.WriteStartElement("value");
+                    writer.WriteAttributeString("type", "http://www.w3.org/2001/XMLSchema-instance", valueType);
+                    writer.WriteAttributeString("representation", valueEDRepresentation);
+                    writer.WriteAttributeString("mediaType", valueEDMediaType);
+                    writer.WriteString(valueED);
+                    writer.WriteEndElement();
+                }
             }
         }
     }

@@ -22,17 +22,15 @@ using nhs.itk.hl7v3.utils;
 namespace nhs.itk.hl7v3.cda
 {
     /// <summary>
-    /// This reflects the Non Coded CDA Profile
+    /// NHS 111 Clinical Document
     /// </summary>
-    public sealed class ClinicalDocument_POCD_MT010011GB02 : CDAModel
+    public sealed class ClinicalDocument_POCD_MT200001GB02 : CDAModel
     {
-        const string MESSAGE_TYPE = "POCD_MT010011GB02";
+        const string MESSAGE_TYPE = "POCD_MT200001GB02";
         const bool modelIsCDA = true;
 
         // Participations (LHS) - These need to be customised for each profile so as to use the correct constraint      
         private List<p_recipient_000080> informationRecipient;
-        private p_dataEnterer_000082 dataEnterer;
-        private p_authenticator_000084 authenticator;
         private List<p_author_000081> author;
         private p_recordTarget_000083 recordTarget;
         private p_custodian_000014 custodian;
@@ -40,25 +38,29 @@ namespace nhs.itk.hl7v3.cda
         private List<p_participation_000086> participant;
 
         // CDA Acts (RHS)
-        private List<act_CDAParentDocument> relatedDocument;  // Releated Document.
+        private List<act_CDAParentDocument> relatedDocument;  // Related Document.
         private List<actRel_DocumentationOf_000050> documentationOf;  // Service Event
         private List<actRel_authorization_000051> authorization;  // Consent
         private actRel_componentOf_000052 componentOf;  // Encompassing Encounter
         private CdaBody component;  // Document Body
 
         // Constructor for the CDA model
-        public ClinicalDocument_POCD_MT010011GB02()
+        public ClinicalDocument_POCD_MT200001GB02()
         {
             base.setupCDADocument();
             base.MessageType = MESSAGE_TYPE;
+
+            // Set the default document properties here, less for the developer to worry about.
+            SetDocumentCodeSnomedCT("819551000000100");
+            Title = "NHS 111 Report";
         }
 
         // Constructor for the CDA model
-        public ClinicalDocument_POCD_MT010011GB02(Guid id)
-        {
-            setupCDADocument();
-            MessageType = MESSAGE_TYPE;
-            Id = id;
+        public ClinicalDocument_POCD_MT200001GB02(Guid id) : this()
+        {          
+           // base.setupCDADocument();
+           // base.MessageType = MESSAGE_TYPE;
+            base.Id = id;
         }
 
         #region Participation : Record target (i.e. patient)
@@ -141,17 +143,6 @@ namespace nhs.itk.hl7v3.cda
         }
         #endregion
 
-        #region Participation : Authenticator
-        // Method for adding an 'authenticator to the CDA document, a mandatory dateTime needs to be provided for each author.
-        public void AddAuthenticator(NPFIT_000084_Role template, DateTime timeValue)
-        {
-            authenticator = new p_authenticator_000084();
-            authenticator.AuthenticationTime = new TS(timeValue);
-            authenticator.AuthenticationTime.DateValuePrecision = DatePrecision.Second;
-            authenticator.Role = template;
-        }
-        #endregion
-
         #region Participation : Informant
         // Method for adding an 'informant' participation to the CDA document
         public void AddInformant(NPFIT_000085_Role template)
@@ -175,15 +166,6 @@ namespace nhs.itk.hl7v3.cda
         {
             custodian = new p_custodian_000014();
             custodian.Role = template;
-        }
-        #endregion
-
-        #region Participation : Data Enterer
-        // Method for adding a 'data enterer' participation to the CDA document
-        public void AddDataEnterer(NPFIT_000082_Role template)
-        {
-            dataEnterer = new p_dataEnterer_000082();
-            dataEnterer.Role = (TP145205GB01_PersonUniversal)template;
         }
         #endregion
 
@@ -235,24 +217,11 @@ namespace nhs.itk.hl7v3.cda
         public void AddComponentOf(NPFIT_000052_Act template)
         {
             componentOf = new actRel_componentOf_000052();
-            componentOf.Act = (TP146228GB01_EncompassingEncounter)template;
+            componentOf.Act = (TP146232GB01_EncompassingEncounter)template;
         }
         #endregion
 
         #region CDA Body
-        /// <summary>
-        /// Add a non XML body to the CDA document. The supplied file will be BASE64 encoded and inserted in the CDA document.
-        /// </summary>
-        /// <param name="mediaType"></param>
-        /// <param name="filename"></param>
-        public void AddNonXMLBody(string mediaType, string filename)
-        {
-            CdaBody nonXML = new CdaBody(true);
-            nonXML.SetNonXmlBody(mediaType, filename);
-
-            component = nonXML;
-        }
-
         /// <summary>
         /// Add a Structured Body to the CDA document
         /// </summary>
@@ -331,11 +300,11 @@ namespace nhs.itk.hl7v3.cda
             writeXmlParentElements(writer);
             writeXmlRecordTarget(writer);
             writeXmlAuthors(writer);
-            writeXmlDataEnterer(writer);
+            //writeXmlDataEnterer(writer); Not required in NHS 111 profile
             writeXmlInformant(writer);
             writeXmlCustodian(writer);
             writeXmlInformationRecipient(writer);
-            writeXmlAuthenticator(writer);
+            //writeXmlAuthenticator(writer); Not required in NHS 111 profile
             writeXmlParticipant(writer);
             writeXmlDocumentationOf(writer);
             writeXmlRelatedDocument(writer);
@@ -458,24 +427,6 @@ namespace nhs.itk.hl7v3.cda
 
 
 
-            }
-        }
-        private void writeXmlDataEnterer(XmlWriter writer)
-        {
-            if (dataEnterer != null)
-            {
-                writer.WriteStartElement("dataEnterer");
-                dataEnterer.WriteXml(writer);
-                writer.WriteEndElement();
-            }
-        }
-        private void writeXmlAuthenticator(XmlWriter writer)
-        {
-            if (authenticator != null)
-            {
-                writer.WriteStartElement("authenticator");
-                authenticator.WriteXml(writer);
-                writer.WriteEndElement();
             }
         }
         private void writeXmlAuthorization(XmlWriter writer)
